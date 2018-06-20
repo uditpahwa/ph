@@ -14,13 +14,17 @@ keep_rate = 0.8
 x = tf.placeholder('float',[None, n_input])
 y = tf.placeholder('float',[None,n_out])
 
-
+#defining the 2-dimentional convolution function with an image 'x' as input and weights is the filter 
 def conv2d(x,weights):
+	
 	return tf.nn.conv2d(x,weights,strides = [1,1,1,1], padding='SAME')
 
+#defining the max-pool function with an image 'x' as input
 def max_pool(x):
 	return tf.nn.max_pool(x, ksize = [1,2,2,1], strides= [1,2,2,1],padding= 'SAME')
 # model
+## This Cnn consist of 2 conv layers and one fully-connected layer and one output layer
+### I've used the relu activation function for the fully connected layer
 def Convolutional_Neural_Network(x):
 
 	weights = {'W_Conv1': tf.Variable(tf.random_normal([5,5,1,32])),
@@ -48,6 +52,9 @@ def Convolutional_Neural_Network(x):
 	output = tf.add(tf.matmul(layer3,weights['Out']),biases['Out'])
 	
 	return output
+
+# Training of the NN:
+
 def training_model(x):
 	prediction = Convolutional_Neural_Network(x)
 	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = prediction, labels= y))
